@@ -440,7 +440,7 @@ re_late[residential_type == "Residential" &
 re_late[residential_type == "Single Family" &
           (property_type %in% c("", "Residential") |
              is.na(property_type)), property_type := "Single Family"]
-re_late[residential_type == "Vacant Land", property_type := "Vacant Land"]
+re_late[residential_type == "Vacant Land" | property_type == "Vacant Land", property_type := "Vacant"]
 re_late[property_type == "Residential", property_type := "Single Family"]
 re_late[property_type %in% c("Apartments", "Condo"), property_type := "Condo/Apartment"]
 

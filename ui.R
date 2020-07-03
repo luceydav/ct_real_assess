@@ -50,7 +50,7 @@ ui <- fluidPage(
         br(),
         strong("Methodology"),
         p("The Summary tab shows the median, average and total units sold by year for the chosen town. 
-        There are 605,499 Single Family, 143,469 Condo/Apartments and 58,883 Multi-Family Homes included. 
+        There are 599,330 Single Family, 139,967 Condo/Apartments and 57,591 Multi-Family Homes included. 
         Because the data is disclosed in annual databases which have varying formats and classifications, 
         Redwall Analytics used judgement in cleaning and reclassifying transactions. Another analyst might make 
         different decisions. The number of units sold during the period and  R2 is the coefficient of determination 
