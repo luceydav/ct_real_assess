@@ -5,9 +5,7 @@ plot_timeplot <- function(dt, town_name, property){
   ##Line chart over time
   dt[(town == town_name & 
         property_type == property &
-        assessed_value > 1000 &
-        (str_detect(non_use_code, "0|^$") | is.na(non_use_code)) & 
-        year(date) %in% c(1999:2018)), #some missing AssessedValue's throwing off Inf SP/AV
+        assessed_value > 1000), #some missing AssessedValue's throwing off Inf SP/AV
      .(property_type,
        qtr, #Calc quarter
        sale_price,

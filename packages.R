@@ -11,18 +11,10 @@ packages <-
     "RSocrata",
     "janitor",
     "lubridate",
-    "ggplot2",
     "zoo",
-    "shiny",
-    "plotly",
-    "highcharter",
-    "formattable",
-    "leaflet",
-    "viridis",
-    "ggbeeswarm",
-    "hrbrthemes",
-    "scales",
-    "keyring")
+    "keyring",
+    "dplyr", 
+    "rsconnect")
 
 if (length(setdiff(packages,rownames(installed.packages()))) > 0) {
   install.packages(setdiff(packages, rownames(installed.packages())))  

@@ -96,12 +96,14 @@ clean_big <- function(dt) {
   # Convert to dt
   dt <- setDT(dt)
   
+
+  
   # Filter re_big for years without source data (ie: 2012-2017)
   # Add source identifier for socrata data
   #dt[, DateRecorded := extract_date_from_chr(DateRecorded)]
   dt[, date := as.Date(daterecorded)][, c("daterecorded", "id") := NULL][, source := 1]
   
-  #Clean names and convert to be consistent with other data
+  #Clean names, setkey and convert to be consistent with other data
   dt <- janitor::clean_names(dt)
   setnames(dt, 
            c("listyear", "serialnumber", "saleamount", "assessedvalue", "salesratio", "propertytype", "residentialtype", "nonusecode"),

@@ -4,10 +4,7 @@ plot_dotplot <- function(dt, town_name, property) {
   
   ## Build dotplot comparing selling prices to assessed values
   dt[(town == town_name &
-        property_type == property &
-        (str_detect(non_use_code, "0|^$") | 
-           is.na(non_use_code)) & 
-        year(date) %in% c(1999:2018)),
+        property_type == property),
      .(property_type,
        qtr,
        year, #Calc quarter
@@ -35,7 +32,7 @@ plot_dotplot <- function(dt, town_name, property) {
                "Sales Prices Exceed Assessment Values in Top Segments Relative To Bottom",
                sep = " "
              ),
-             subtitle = "Data as of 2016 shows lesser valued home sales in purple",
+             subtitle = "Data as of 2018 shows lesser valued home sales in purple",
              caption = "Public data via CT Data",
              color = ""
            ) +

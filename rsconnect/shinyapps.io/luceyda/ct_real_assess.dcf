@@ -5,8 +5,6 @@ account: luceyda
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 569332
-bundleId: 3340445
+bundleId: 3404279
 url: https://luceyda.shinyapps.io/ct_real_assess/
-when: 1593631911.14687
-asMultiple: FALSE
-asStatic: FALSE
+when: 1594999974.24986

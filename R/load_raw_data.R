@@ -10,15 +10,13 @@ load_raw_data <- function() {
     path <- "/Users/davidlucey/Desktop/David/Projects/ct_real_estate/data/"
     
        #Load MS Access DB
-      re_1999 <- 
-        setDT(
-        Hmisc::mdb.get(
-          paste0(path, "99_sales.mdb"), 
-          tables = "MasterTownDetail"
-          )
+    re_1999 <- 
+      Hmisc::mdb.get(
+        paste0(path, "99_sales.mdb"), 
+        tables = "MasterTownDetail"
         )
-    
-      re_1999[, DateRecorded := extract_date_from_chr(DateRecorded)]
+    re_1999 <- setDT(re_1999)  
+    re_1999[, DateRecorded := extract_date_from_chr(DateRecorded)]
 
     # Load 2000 sales from xls
     re_2000 <- 

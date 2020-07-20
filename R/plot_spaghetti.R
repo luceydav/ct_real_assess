@@ -1,13 +1,11 @@
 # spaghetti of every town of average sales price used in Shiny app
 # town_name and property specified from Shiny ui
-plot_spaghetti <- function(dt, highlight, type){
+plot_spaghetti <- function(dt, town_name, type){
   
   dt <-  
-    dt[((str_detect(non_use_code, "0|^$") |
-           is.na(non_use_code)) &
-          year(date) %in% c(1999:2018)), 
+    dt[, 
        mean(as.numeric(sale_price), na.rm = TRUE),
-       .(town, year, property_type)][, . (
+       .(town, year, property_type)][, .(
          `Average Price` = V1,
          `Year` = year,
          `Town` = town,
@@ -15,30 +13,33 @@ plot_spaghetti <- function(dt, highlight, type){
        )][(property_type == type &
              `Average Price` > 20000)]
   
-  town <- dt[`Town` == highlight]
-  dt <- dt[`Town` != highlight]
+  town <- dt[Town == town_name]
   
-  ggplot(dt,
-         aes(`Year`,
-             `Average Price`,
-             group = `Town`)) +
-    scale_y_log10(labels =
-                    scales::unit_format(
-                      unit = "K",
-                      scale = 1e-3,
-                      big.mark = ","
-                    )) +
-    geom_line() +
-    geom_line(
-      data = town,
-      aes(`Year`,
-          `Average Price`,
-          col = "red"),
-      size = 0.5
-    ) +
-    theme_bw() +
-    theme(legend.position = "none") +
-    labs(title = "CT Average Annual Sales Price by Town since 1999",
-         x = "",
-         y = "") 
+  ks <- function (x) { number_format(accuracy = 1,
+                                     scale = 1/1000,
+                                     suffix = "k",
+                                     big.mark = ",")(x) }
+  
+  dt[Town != town_name,
+     ggplot(.SD,
+            aes(`Year`,
+                `Average Price`,
+                group = `Town`)) +
+       geom_line() +
+       theme_bw() +
+       geom_line(data = town,
+                 aes(`Year`,
+                     `Average Price`,
+                     col = "red"),
+                 size = 0.5) +
+      scale_y_continuous(trans = "log10",
+                         labels = ks) +
+       labs(title = "CT Average Annual Sales Price by Town since 1999",
+            subtitle = "Selected municipality shown in red",
+            caption = "Public data via CT data",
+            y = "Average Price - Log Scale ($K)") +
+       hrbrthemes::theme_ipsum_rc(grid = "XY",
+                                  strip_text_face = "bold") +
+       theme(legend.position = "none")]
+
 }

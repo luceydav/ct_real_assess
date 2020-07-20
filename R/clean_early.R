@@ -2,6 +2,9 @@
 # Customized to clean early years
 clean_early <- function(dt){
   
+  # Path to local
+  path <- "/Users/davidlucey/Desktop/David/Projects/ct_real_estate/data/"
+  
   # First move date back to chr then convert blank to NA
   dt[, DateRecorded := as.character(DateRecorded)]
   dt[dt == "" | dt == " " | dt == "  "] <- NA
