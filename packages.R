@@ -14,7 +14,8 @@ packages <-
     "zoo",
     "keyring",
     "dplyr", 
-    "rsconnect")
+    "rsconnect", 
+    "glue")
 
 if (length(setdiff(packages,rownames(installed.packages()))) > 0) {
   install.packages(setdiff(packages, rownames(installed.packages())))  

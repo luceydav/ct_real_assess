@@ -13,10 +13,19 @@ library(ggbeeswarm)
 library(hrbrthemes)
 library(scales)   
 library(arules)
+library(glue)
 
 # Data
 data_input <- 
   setDT(readRDS("ct_sales_99_2018.RDS"))
+
+# Count property types and assign variables
+summary <- data_input[, .N, property_type]
+for(i in 1:nrow(summary)){
+  if(summary[i, ]$N > 1000){
+    assign(paste0(summary[i, ]$property_type), format(summary[i, ]$N, big.mark = ","))
+  }
+}
 
 ## Load your R files
 lapply(list.files("./R", full.names = TRUE, pattern = "plot"), source)
@@ -87,21 +96,21 @@ shinyApp(
         br(),
         strong("Methodology"),
         p(
-          "The State of CT Office of Policy & Management discloses real estate sales in annual databases which have varying
-          formats and classifications, Redwall Analytics used judgement in cleaning and reclassifying transactions, but another analyst
-          might make different decisions. There are 580,503 Single Family, 113,659 Condo/Apartments, 86,700 Multi-Family, 52,618
-          Vacant Lots, 19,991 Commercial and 4,100 Industrial Properties included. Only transactions which were judged to be arms
-          length based on the town-specified non-use-code were included. The Summary tab shows the median, average and total units sold 
-          by year for the chosen town. R2 is the coefficient of determination of the assessment value on sales price. The higher the R2, 
-          the more accurately the assessment values predicted the selling prices in that year and town for the specified property category. 
-          The Spaghetti Plot shows the average annual price over time of that town relative to all the other towns in CT for the selected 
-          product category. The Time Chart tab shows the median selling price divided  by median assessment value for that year and 
+          HTML(glue("The State of CT Office of Policy & Management discloses real estate sales in annual databases, which have had varying
+          formats and classifications. Redwall Analytics used judgement in cleaning and reclassifying property types, but another analyst
+          might make different decisions. There are {`Single Family`} Single Family,  {`Condo/Apartment`} Condo/Apartments, {`Multi-Family`} Multi-Family, {Vacant}
+          Vacant Lots, {Commercial} Commercial and {Industrial} Industrial Properties included. Only transactions which were judged to be <em>arms
+          length</em>, based on the town-specified <em>non-use-code</em> were included. <em>Summary</em> shows the median, average and total units sold 
+          by year for the chosen town. R<sup>2</sup> is the coefficient of determination of the assessment value on sales price. The higher the R<sup>2</sup>, 
+          the more accurately the assessment values predicted the selling prices in that year and town for the specified property type 
+          <em>Spaghetti Plot</em> shows the average annual price over time of that town relative to all the other towns in CT for the selected 
+          property type. <em>Time Chart</em> shows the median selling price divided by median assessment value for that year and 
           selected town. Assessment ratios close to 1x indicate the selling price was equal to the assessed value. Values closer to 1.5x 
-          for example indicate the group was 'under-assessed' by 50% relative to a group assessed at 1.0x. The Dot Plot shows the ratio of 
-          selling price to assessment price for each individual home sold (ie: not grouped as in the Time Chart). A Dot Plot indicating fair 
+          for example indicate the group was 'under-assessed' by 50% relative to a group assessed at 1.0x. <em>Dot Plot</em> shows the ratio of 
+          selling price to assessment value for each individual home sold (ie: not grouped as in the <em>Time Chart</em>). A <em>Dot Plot</em> indicating fair 
           assessment values should look purple with the darker (lesser valued) effectively covering the lighter (more expensive) homes sold. 
           Separation with the dark dots on the left closer to 1 shows possible under assessment of more expensive homes. Hartford which 
-          is shown as the default here is one of the worst cases with clear separation between purple and green/yellow.", 
+          is shown as the default here is one of the worst cases with clear separation between purple and green/yellow.")), 
           value = "title"
         ), 
         br()
