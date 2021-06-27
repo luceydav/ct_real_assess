@@ -131,7 +131,7 @@ shinyApp(
         non_use_code == "0" |
           str_detect(non_use_code, "^$") |
           is.na(non_use_code)) &
-          year(date) < 2019 &
+          year(date) < 2020 &
           property_type %in%
           c(
             "Single Family",
