@@ -34,7 +34,7 @@ plot_spaghetti <- function(dt, town_name, type){
                  size = 0.5) +
       scale_y_continuous(trans = "log10",
                          labels = ks) +
-       labs(title = "CT Average Annual Sales Price by Town since 1999",
+       labs(title = "CT Average Annual Sales Price by Town since 2000",
             subtitle = "Selected municipality shown in red",
             caption = "Public data via CT data",
             y = "Average Price - Log Scale ($K)") +

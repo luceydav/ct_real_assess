@@ -32,7 +32,7 @@ plot_dotplot <- function(dt, town_name, property) {
                "Sales Prices Exceed Assessment Values in Top Segments Relative To Bottom",
                sep = " "
              ),
-             subtitle = "Data as of 2018 shows lesser valued home sales in purple",
+             subtitle = "Data as of 2021 shows lesser valued home sales in purple",
              caption = "Public data via CT Data",
              color = ""
            ) +

@@ -18,6 +18,8 @@ library(glue)
 # Data
 data_input <- 
   setDT(readRDS("ct_sales_99_2018.RDS"))
+data_input <- 
+  data_input[!is.na(year)]
 
 # Count property types and assign variables
 summary <- data_input[, .N, property_type]
@@ -34,7 +36,7 @@ shinyApp(
   
   ui <- fluidPage(
     
-    titlePanel("Connecticut Property Selling Prices vs Assessment Values over Three Revaluation Cycles"),
+    titlePanel("Connecticut Property Selling Prices vs Assessment Values over Four Revaluation Cycles"),
     
     # App title ----
     titlePanel(""),
@@ -123,7 +125,7 @@ shinyApp(
     town_name <- reactive(input$town_name[1])
     property <- reactive(input$property[1])
     
-    # Set up full sales data of arms length sales from 1999-2018
+    # Set up full sales data of arms length sales from 1999-2021
     d <- reactive(
       
       ##Calculate summary stats
