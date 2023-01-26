@@ -1,7 +1,7 @@
 # Add reval year
 add_reval <- function(dt) {
   
-  path <- "/Users/davidlucey/Desktop/David/Projects/ct_real_estate/data/"
+  path <- "/Users/davidlucey/Documents/Projects/ct_real_estate/data/"
   
   # Reval years
   reval <-

@@ -3,10 +3,10 @@
 clean_early <- function(dt){
   
   # Path to local
-  path <- "/Users/davidlucey/Desktop/David/Projects/ct_real_estate/data/"
+  path <- "/Users/davidlucey/Documents/Projects/ct_real_estate/data/"
   
   # First move date back to chr then convert blank to NA
-  dt[, DateRecorded := as.character(DateRecorded)]
+  dt[, date_recorded := as.character(date_recorded)]
   dt[dt == "" | dt == " " | dt == "  "] <- NA
   
   # Trim white space for all variables in case data input was messy                 
@@ -14,68 +14,68 @@ clean_early <- function(dt){
   dt <- dt[, (cols) := lapply(.SD, trimws), .SDcols = cols]
   
   cols <-
-    c("TotalAssessment", "SaleAmount")
+    c("total_assessment", "sale_amount")
   dt[, (cols) := lapply(.SD, readr::parse_number), .SDcols=cols]
   
   # Create multi-family column to denote if Single Family, Multiple or Unknown
   # This was made necessary for years where separate columns for number of families were disclosed
   dt[, residential_type := 
        create_residential_type(
-         OneFamily,
-         TwoFamily,
-         ThreeFamily)]
+         one_family,
+         two_family,
+         three_family)]
   
   # Create alternate PropertyType1 column to gather info from separate column types where available
   # uses create_property_type defined above
   dt[, 
-     PropertyType1 :=
+     property_type_1 :=
        create_property_type(
-         Residential,
-         ResidentialOther,
-         Apartment,
-         Commercial,
-         Industrial,
-         VacantLand,
-         Utility
+         residential,
+         residential_other,
+         apartment,
+         commercial,
+         industrial,
+         vacant_land,
+         utility
        )]
   
   # Manual Allocations using all data
-  dt[((PropertyType == "R" |
-         PropertyType1 == "Residential") &
-        Condo == "X" & 
+  dt[((property_type == "R" |
+         property_type_1 == "Residential") &
+        condo == "X" & 
         residential_type == "Single Family"),
      new_class := "Condo/Apartment"]
-  dt[((PropertyType == "R" |
-         PropertyType1 == "Residential") &
+  dt[((property_type == "R" |
+         property_type_1 == "Residential") &
         residential_type %in% c("Three Family", "Two Family")),
      new_class := "Multi-Family"]
-  dt[((PropertyType == "R" | 
-         PropertyType1 == "Residential") &
-        is.na(Condo) & 
+  dt[((property_type == "R" | 
+         property_type_1 == "Residential") &
+        is.na(condo) & 
         residential_type == "Single Family"),
      new_class := "Single Family"]
-  dt[PropertyType1 == "Commercial" & 
-       PropertyType != "R" &
+  dt[property_type_1 == "Commercial" & 
+       property_type != "R" &
        !is.na(new_class),
      new_class := "Commercial"]
-  dt[PropertyType1 == "Industrial" & 
-       PropertyType != "R" &
+  dt[property_type_1 == "Industrial" & 
+       property_type != "R" &
        is.na(new_class),
      new_class := "Industrial"]
-  dt[PropertyType1 == "Vacant" | 
-       PropertyType == "V" &
+  dt[property_type_1 == "Vacant" | 
+       property_type == "V" &
        is.na(new_class),
      new_class := "Vacant"]
-  dt[PropertyType == "A" & 
+  dt[property_type == "A" & 
        residential_type != "Single Family" &
        is.na(new_class),
      new_class := "Multi-Family"]
-  dt[PropertyType == "A" & 
+  dt[property_type == "A" & 
        residential_type == "Single Family" &
        is.na(new_class), 
      new_class := "Condo/Apartment"]
-  dt[PropertyType == "C/I/U" & 
-       PropertyType1 == "Utility" &
+  dt[property_type == "C/I/U" & 
+       property_type_1 == "Utility" &
        is.na(new_class),
      new_class := "Utility"]
   dt[is.na(new_class),
@@ -89,14 +89,16 @@ clean_early <- function(dt){
   
   town_table <- # Trim white space in towns table
     as.data.table(sapply(town_table, trimws))
+  town_table <- 
+    clean_names(town_table)
   
   # Join to add Town names on town codes
-  dt <- town_table[dt, on = c("Town.Code" = "TownCode")]
+  dt <- town_table[dt, on = "town_code"]
   
   # Fix names
   setnames(
     dt,
-    c("Town.Name", "TotalAssessment", "PropertyLocation"),
+    c("town_name", "total_assessment", "property_location"),
     c("Town", "AssessedValue", "Address")
   )
   

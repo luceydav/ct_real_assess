@@ -2,7 +2,7 @@
 merge_and_clean_sources <- function(dt1, dt2) {
   
   # Merge both manual and OPM cleaned rows
-  if(class(dt1) != "try-error") {
+  if(class(dt1)[1] != "try-error") {
     dt <- rbind(dt1, dt2, fill=TRUE)
   } else {
     dt <- dt2

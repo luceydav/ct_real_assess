@@ -21,10 +21,10 @@ data_input <-
 
 # Count property types and assign variables
 summary <- data_input[, .N, property_type]
+summary <- 
+  summary[!is.na(property_type)][property_type != ""][N > 1000]
 for(i in 1:nrow(summary)){
-  if(summary[i, ]$N > 1000){
-    assign(paste0(summary[i, ]$property_type), format(summary[i, ]$N, big.mark = ","))
-  }
+  assign(paste0(summary[i, ]$property_type), format(summary[i, ]$N, big.mark = ","))
 }
 
 ## Load your R files
@@ -131,7 +131,7 @@ shinyApp(
         non_use_code == "0" |
           str_detect(non_use_code, "^$") |
           is.na(non_use_code)) &
-          year(date) < 2020 &
+          year(date) < 2022 &
           property_type %in%
           c(
             "Single Family",

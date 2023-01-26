@@ -7,7 +7,7 @@
 load_raw_data <- function() {
   
     # Path to local
-    path <- "/Users/davidlucey/Desktop/David/Projects/ct_real_estate/data/"
+    path <- "/Users/davidlucey/Documents/Projects/ct_real_estate/data/"
     
        #Load MS Access DB
     re_1999 <- 
@@ -73,15 +73,34 @@ load_raw_data <- function() {
       )
     re_2005[, DateRecorded := extract_date_from_chr(DateRecorded)]
     
+    # Create files list
+    files <-
+      list(
+        re_1999,
+        re_2000, 
+        re_2001, 
+        re_2002, 
+        re_2003, 
+        re_2004,
+        re_2005
+      )
+    
+    # Cols to keep
+    files <- lapply(files, janitor::clean_names)
+    files <- 
+      lapply(files, function(file) {
+        if (any(re2::re2_detect(names(file), "mod"))) {
+          file <- file[, .SD, .SDcols=!patterns("mod")]
+        } else {
+          file
+        }
+      })
+    
+    
+    
     # Bind all early years into an aggregated data.table
     re_early <- rbindlist(
-      list(re_1999, 
-           re_2000, 
-           re_2001, 
-           re_2002, 
-           re_2003, 
-           re_2004, 
-           re_2005),
+      files,
       fill = TRUE,
       use.names = TRUE
     )
@@ -176,6 +195,9 @@ load_raw_data <- function() {
     
     # Add source identifier for raw 
     re_total[, source := 2]
+    
+    re_total <-
+      re_total[!is.na(year)]
   
   # Return
   return(re_total)
